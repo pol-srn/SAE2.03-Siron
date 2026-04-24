@@ -17,10 +17,13 @@
 
       window.C = {};
       C.handlerUpdate = async function(){
-            let form = document.querySelector('.addMovie__form');
+            let form = document.querySelector('.addFilm__form');
+            if(form.reportValidity()){
             let fd = new FormData(form);
-            let res = await DataMenu.update(fd);
+            let res = await DataMovie.add(fd);
             V.renderLog(res);
+            }
+
         }
 
 

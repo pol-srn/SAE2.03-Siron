@@ -3,31 +3,29 @@
     <form class="addFilm__form">
 
 
-        <input required type="text" name="Titre" placeholder="Saisir un titre">
-        <input required type="text" name="Réalisateur" placeholder="Saisir un réalisateur">
-        <input required type="number" name="année de sortie" placeholder="Saisir l'année de sortie">
-        <input required type="number" name="durée" placeholder="Saisir la durée du film">
+        <input required type="text" name="name" placeholder="Saisir un titre">
+        <input required type="text" name="director" placeholder="Saisir un réalisateur">
+        <input required type="number" name="year" placeholder="Saisir l'année de sortie">
+        <input required type="number" name="length" placeholder="Saisir la durée du film">
         <input required type="text" name="description" placeholder="Saisir la description">
 
-        <select name="catégorie">
-            <option value="Action">Action</option>
-            <option value="Animation">Animation</option>
-            <option value="Aventure">Aventure</option>
-            <option value="Comédie">Comédie</option>
-            <option value="Documentaire">Documentaire</option>
-            <option value="Drame">Drame</option>
-            <option value="Fantastique">Fantastique</option>
-            <option value="Horreur/Épouvante">Horreur/Épouvante</option>
-            <option value="Policier/Thriller">Policier/Thriller</option>
-            <option value="Romance">Romance</option>
-            <option value="Science-Fiction">Science-Fiction</option>
-            <option value="Western">Western</option>
+        <select name="id_category">
+            <option value="1">Action</option>
+            <option value="2">Animation</option>
+            <option value="3">Aventure</option>
+            <option value="4">Comédie</option>
+            <option value="5">Documentaire</option>
+            <option value="6">Drame</option>
+            <option value="7">Fantastique</option>
+            <option value="8">Horreur/Épouvante</option>
+            <option value="9">Policier/Thriller</option>
+            <option value="10">Romance</option>
         </select>
 
-        <input required type="text" name="nom du fichier de l'affiche du film"
+        <input required type="text" name="image"
             placeholder="Saisir le nom du fichier de l'affiche du film">
-        <input required type="text" name="URL du trailer" placeholder="Saisir l'URL du trailer">
-        <input required type="number" name="restriction d'age" placeholder="Saisir la restriction d'age">
+        <input required type="text" name="trailer" placeholder="Saisir l'URL du trailer">
+        <input required type="number" name="min_age" placeholder="Saisir la restriction d'age">
         <input onclick="{{handler}}" type="button" value="Update" name="todo">
     </form>
 </div>

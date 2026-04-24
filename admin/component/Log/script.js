@@ -18,6 +18,7 @@ let add = function(txt){ // non exporté, interne au module du composant (encaps
     let time = h + ':' + m + ':' + s;
     let log = {time: time, txt: txt};
     history.push(log);
+
 }
 
 let formatHistory= function(){ // non exporté, interne au module du composant (encapsulation)
