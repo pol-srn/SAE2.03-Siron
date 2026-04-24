@@ -19,6 +19,7 @@ Movie.format = function (data) {
             let li = templateLi;
             li = li.replaceAll("{{image}}", "../server/images/" +  list.image);
             li = li.replaceAll("{{title}}", list.name);
+            li = li.replaceAll("{{id}}", list.id);
     
             htmlList += li;
         }

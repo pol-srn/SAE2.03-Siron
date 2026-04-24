@@ -13,9 +13,10 @@
     <section id="content"></section>
 
     <script type="module">
+      import { DataMovie } from "./data/dataMovie.js";
       import { NavBar } from "./component/NavBar/script.js";
       import { Movie } from "./component/Movie/script.js";
-      import { DataMovie } from "./data/dataMovie.js";
+      import { MovieDetail } from "./component/MovieDetail/script.js";
 
       let movies = await DataMovie.requestMovies();
 
@@ -35,6 +36,10 @@
         V.renderMovie(movies);
       };
 
+       C.handlerDetail = async function (id_film){
+        let detail = await DataMovie.requestMovieDetails(id_film);
+        V.renderMovieDetails(detail);
+       }
 
       // Vue (contient tout ce qui est relatif à l'affichage)
       window.V = {};
@@ -53,6 +58,10 @@
       V.renderMovie = function (data) {
         let content = document.querySelector("#content");
         content.innerHTML = Movie.format(data);
+      };
+      V.renderMovieDetails = function (data) {
+        let content = document.querySelector("#content");
+        content.innerHTML = MovieDetail.format(data);
       };
 
       C.start(); // Démarre l'application

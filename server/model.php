@@ -1,4 +1,11 @@
 <?php
+// Activer le rapport d'erreurs PHP
+error_reporting(E_ALL);
+
+// Forcer l'affichage des erreurs à l'écran
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
 /**
  * Ce fichier contient toutes les fonctions qui réalisent des opérations
  * sur la base de données, telles que les requêtes SQL pour insérer, 
@@ -56,4 +63,17 @@ function addMovie($name, $year, $length, $description, $director, $id_category, 
     // Récupère le nombre de lignes affectées par la requête
     $res = $stmt->rowCount(); 
     return $res; // Retourne le nombre de lignes affectées
+}
+
+function getMovieDetails($id){
+$cnx = new PDO("mysql:host=".HOST.";dbname=".DBNAME, DBLOGIN, DBPWD); 
+
+$sql = " SELECT Movie.*, Category.name AS category_name
+    FROM Movie
+    INNER JOIN Category ON Movie.id_category = Category.id
+    WHERE Movie.id = :id";
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
+    $res = $stmt->fetchAll(PDO::FETCH_OBJ); 
+    return $res;
 }
