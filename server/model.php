@@ -32,3 +32,28 @@ function getAllMovies(){
     $res = $stmt->fetchAll(PDO::FETCH_OBJ);
     return $res; // Retourne les résultats
 }
+
+function updateMenu($name, $year, $length, $description, $director, $id_category, $image, $trailer, $min_age){
+    // Connexion à la base de données
+    $cnx = new PDO("mysql:host=".HOST.";dbname=".DBNAME, DBLOGIN, DBPWD); 
+    // Requête SQL de mise à jour du menu avec des paramètres
+    $sql = "INSERT INTO Movie (name, year, length, description, director, id_category, image, trailer, min_age) 
+            VALUES (:name, :year, :length, :description, :director, :id_category, :image, :trailer, :min_age)";
+    // Prépare la requête SQL
+    $stmt = $cnx->prepare($sql);
+    // Lie les paramètres aux valeurs
+    $stmt->bindParam(':name', $name);
+    $stmt->bindParam(':year', $year);
+    $stmt->bindParam(':length', $length);
+    $stmt->bindParam(':description', $description);
+    $stmt->bindParam(':director', $director);
+    $stmt->bindParam(':id_category', $id_category);
+    $stmt->bindParam(':image', $image);
+    $stmt->bindParam(':trailer', $trailer);
+    $stmt->bindParam(':min_age', $min_age);
+    // Exécute la requête SQL
+    $stmt->execute();
+    // Récupère le nombre de lignes affectées par la requête
+    $res = $stmt->rowCount(); 
+    return $res; // Retourne le nombre de lignes affectées
+}

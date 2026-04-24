@@ -1,37 +1,40 @@
-.movie{
+.movie {
     padding: 2rem;
-    
-    .movie__list{
+
+    .movie__list {
         display: grid;
         justify-items: center;
         gap: 1rem;
     }
-    .movie__item{
-        
-    }
-    .movie__img{
+
+    .movie__item {}
+
+    .movie__img {
         width: 100%;
         height: auto;
         border-radius: 0.5rem;
     }
-    .movie__title{
+
+    .movie__title {
         font-size: 1.5rem;
         padding-left: 0.5rem;
     }
 }
 
-@media (min-width: 64rem){
-    .movie{
+@media (min-width: 44rem) {
+    .movie {
 
-        .movie__list{
+        .movie__list {
             grid-template-columns: repeat(4, 1fr);
         }
-        .movie__img{
-            width: 20rem ;
+
+        .movie__img {
+            width: 20rem;
             max-height: 27rem;
         }
-        .movie__title{
-            font-size: 1.2rem ;
+
+        .movie__title {
+            font-size: 1.2rem;
         }
     }
 }

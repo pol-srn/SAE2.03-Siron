@@ -18,7 +18,7 @@ Mais chacune possède un composant que vous devez voir apparaître.
 Vous avez modifié votre code (model.php). Vérifez votre configuration Git/Github en tentant un premier
 commit : 
 -   git add .
--   git commit -m "update credentials"
+-   c
 -   git push
   
 Si tout va bien, vous devez retrouver sur votre espace Github la modification que vous venez de réaliser.
