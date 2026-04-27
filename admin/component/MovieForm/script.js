@@ -6,16 +6,18 @@ let templateLi = await templateLiFile.text();
 
 let MovieForm = {};
 
-MovieForm.format = function (handler) {
+MovieForm.format = function (data,handler) {
     let html = template;
     let listMovie = "";
     for (let movie of data) {
         let li = templateLi;
         li = li.replaceAll("{{id}}", movie.id);
+        li = li.replaceAll("{{name}}", movie.name);
 
         listMovie += li;
     }
-    html = html.replace('{{handler}}', listMovie);
+    html = html.replaceAll('{{idList}}', listMovie);
+    html = html.replaceAll('{{handler}}', handler);
     return html;
 }
 

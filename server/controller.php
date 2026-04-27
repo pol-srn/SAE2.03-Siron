@@ -29,7 +29,15 @@ require("model.php");
 
 function readMoviesController(){
     $movies = getAllMovies();
-    return $movies;
+    $grp = [];
+    foreach($movies as $film){
+      $container = $film -> category_nom;
+      if(!isset($grp[$container])){
+        $groupe[$container] = [];
+      }
+      $grp[$container][] = $film;
+    }
+    return $grp;
 }
 
 function addMovieController(){
@@ -52,6 +60,10 @@ function addMovieController(){
     else{
     return "error";
   }
+}
+
+function readCategoriesController(){
+    return getAllCategories();
 }
 
 function readMoviesDetailController(){

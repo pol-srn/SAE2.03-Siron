@@ -17,6 +17,7 @@
       import { NavBar } from "./component/NavBar/script.js";
       import { Movie } from "./component/Movie/script.js";
       import { MovieDetail } from "./component/MovieDetail/script.js";
+      import { MovieCategory } from "./component/MovieCategory/script.js";
 
       let movies = await DataMovie.requestMovies();
 
@@ -63,6 +64,11 @@
       V.renderMovie = function (data) {
         let content = document.querySelector("#content");
         content.innerHTML = Movie.format(data);
+        for (let categoryName in group) {
+          let categoryMovie= group[categoryName];
+          finalHtml += MovieCategory.format(categoryName, categoryMovie);
+        }
+        content.innerHTML = finalHtml;
       };
       V.renderMovieDetails = function (data) {
         let content = document.querySelector("#content");

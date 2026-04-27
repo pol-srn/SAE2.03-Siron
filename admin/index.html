@@ -1,49 +1,53 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <title>SAE2.03 ADMIN</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./css/base.css" />
-  </head>
-  <body>
-    <section id="log"></section>
-    <section id="addMenu"></section>
 
-    <script type="module">
-      import {DataMovie} from './data/dataMovie.js';
-      import { Log } from "./component/Log/script.js";
-      import { MovieForm } from "./component/MovieForm/script.js";
+<head>
+  <title>SAE2.03 ADMIN</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./css/base.css" />
+</head>
 
-      window.C = {};
-      C.handlerUpdate = async function(){
-            let form = document.querySelector('.addFilm__form');
-            if(form.reportValidity()){
-            let fd = new FormData(form);
-            let res = await DataMovie.add(fd);
-            V.renderLog(res);
-            }
+<body>
+  <section id="log"></section>
+  <section id="addMenu"></section>
 
-        }
+  <script type="module">
+    import { DataMovie } from './data/dataMovie.js?v=1';
+    import { Log } from "./component/Log/script.js";
+    import { MovieForm } from "./component/MovieForm/script.js";
+
+    window.C = {};
+    C.handlerUpdate = async function () {
+      let form = document.querySelector('.addFilm__form');
+      if (form.reportValidity()) {
+        let fd = new FormData(form);
+        let res = await DataMovie.add(fd);
+        V.renderLog(res);
+      }
+
+    }
 
 
-      C.start = function () {
-        V.renderLog("Démarrage de l'application");
-        V.renderMovieForm("C.handlerUpdate()");
-      };
+    C.start = async function () {
+      V.renderLog("Démarrage de l'application");
+      let categories = await DataMovie.requestCategories();
+      V.renderMovieForm(categories, "C.handlerUpdate()");
+    };
 
-      window.V = {};
+    window.V = {};
 
-      V.renderLog = function (txt) {
-        let content = document.querySelector("#log");
-        content.innerHTML = Log.format(txt);
-      };
-      V.renderMovieForm = function (handler) {
-        let content = document.querySelector("#addMenu");
-        content.innerHTML = MovieForm.format(handler);
-      };
+    V.renderLog = function (txt) {
+      let content = document.querySelector("#log");
+      content.innerHTML = Log.format(txt);
+    };
+    V.renderMovieForm = function (categories, handler) {
+      let content = document.querySelector("#addMenu");
+      content.innerHTML = MovieForm.format(categories, handler);
+    };
 
-      C.start();
-    </script>
-  </body>
+    C.start();
+  </script>
+</body>
+
 </html>
