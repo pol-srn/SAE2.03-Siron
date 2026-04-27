@@ -9,17 +9,10 @@
         <input required type="number" name="length" placeholder="Saisir la durée du film">
         <input required type="text" name="description" placeholder="Saisir la description">
 
-        <select name="id_category">
-            <option value="1">Action</option>
-            <option value="2">Animation</option>
-            <option value="3">Aventure</option>
-            <option value="4">Comédie</option>
-            <option value="5">Documentaire</option>
-            <option value="6">Drame</option>
-            <option value="7">Fantastique</option>
-            <option value="8">Horreur/Épouvante</option>
-            <option value="9">Policier/Thriller</option>
-            <option value="10">Romance</option>
+        <select class="id-category">
+            <ul class="id-category__list">
+                {{idList}}
+            </ul>
         </select>
 
         <input required type="text" name="image"
