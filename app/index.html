@@ -1,82 +1,116 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <title>SAE2.03 APP</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./css/base.css" />
-  </head>
 
-  <body>
-    <header id="header"></header>
+<head>
+  <title>SAE2.03 APP</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="./css/base.css" />
+</head>
 
-    <section id="content"></section>
+<body>
+  <header id="header"></header>
 
-    <script type="module">
-      import { DataMovie } from "./data/dataMovie.js";
-      import { NavBar } from "./component/NavBar/script.js";
-      import { Movie } from "./component/Movie/script.js";
-      import { MovieDetail } from "./component/MovieDetail/script.js";
-      import { MovieCategory } from "./component/MovieCategory/script.js";
+  <section id="content"></section>
 
-      let movies = await DataMovie.requestMovies();
+  <script type="module">
+    import { DataMovie } from "./data/dataMovie.js";
+    import { NavBar } from "./component/NavBar/script.js";
+    import { Movie } from "./component/Movie/script.js";
+    import { MovieDetail } from "./component/MovieDetail/script.js";
+    import { MovieCategory } from "./component/MovieCategory/script.js";
+    import { DataProfile } from './data/dataProfile.js';
 
-      // Controleur
-      // Rappel, écrire window.C plutôt que let C est nécessaire pour tester depuis la console du navigateur
-      // Une fois l'application terminée, on pourrait remettre let C.
-      window.C = {};
 
-      C.handlerAbout = function () {
-        alert(
-          "Ceci est une base de projet pour la SAE2.03 édition 2025. Bonne chance !"
-        );
-      };
 
-      C.start = function () {
-        V.renderNavBar("C.handlerHome()");
-        V.renderMovie(movies);
-      };
+    // Controleur
+    // Rappel, écrire window.C plutôt que let C est nécessaire pour tester depuis la console du navigateur
+    // Une fois l'application terminée, on pourrait remettre let C.
+    window.C = {};
 
-       C.handlerDetail = async function (id_film){
-        let detail = await DataMovie.requestMovieDetails(id_film);
-        console.log("Données reçues du serveur :", detail);
-        V.renderMovieDetails(detail);
-       }
+    window.activeProfile = null;
 
-       C.handlerHome = async function (){
-        V.renderMovie(movies);
-       }
+    C.handlerAbout = function () {
+      alert(
+        "Ceci est une base de projet pour la SAE2.03 édition 2025. Bonne chance !"
+      );
+    };
 
-      // Vue (contient tout ce qui est relatif à l'affichage)
-      window.V = {};
-
-      /**
-       * V.renderNavBar
-       *
-       * Cette fonction est responsable de l'affichage de la barre de navigation (NavBar).
-       * Elle sélectionne l'élément HTML avec l'ID "header" et y insère le contenu
-       * formaté par le composant NavBar.
-       */
-      V.renderNavBar = function (hHome) {
-        let header = document.querySelector("#header");
-        header.innerHTML = NavBar.format(hHome);
-      };
-      V.renderMovie = function (data) {
+    C.start = async function () {
+        let profiles = await DataProfile.read();
+        
+        V.renderNavBar("C.handlerHome()", "C.handlerLogout()", "C.handlerSelectProfile", profiles);
+        
         let content = document.querySelector("#content");
-        content.innerHTML = Movie.format(data);
-        for (let categoryName in group) {
-          let categoryMovie= group[categoryName];
-          finalHtml += MovieCategory.format(categoryName, categoryMovie);
+        content.innerHTML = "<h2 style='text-align:center; margin-top:50px;'>Veuillez sélectionner un profil pour voir les films.</h2>";
+    };
+
+    C.handlerLogout = function () {
+        window.activeProfile = null;
+        C.start();
+    };
+
+    C.handlerDetail = async function (id_film) {
+      let detail = await DataMovie.requestMovieDetails(id_film);
+      console.log("Données reçues du serveur :", detail);
+      V.renderMovieDetails(detail);
+    }
+
+    C.handlerHome = async function () {
+      let moviesData = await DataMovie.requestMovies();
+      V.renderMovie(moviesData);
+    }
+
+    C.handlerSelectProfile = async function (idProfil) {
+        if (idProfil == "") {
+            C.start();
+            return;
         }
-        content.innerHTML = finalHtml;
-      };
-      V.renderMovieDetails = function (data) {
-        let content = document.querySelector("#content");
-        content.innerHTML = MovieDetail.format(data);
-      };
+        window.activeProfile = idProfil;
+        let profiles = await DataProfile.read();
+        let ageDuProfil = 0; 
+        for (let i = 0; i < profiles.length; i++) {
+            let profilEnCours = profiles[i];
+            if (profilEnCours.id == idProfil) {
+                ageDuProfil = profilEnCours.age_restriction; 
+            }
+        }
+        let moviesData = await DataMovie.requestMovies(ageDuProfil);   
+        V.renderMovie(moviesData);
+    };
 
-      C.start(); // Démarre l'application
-    </script>
-  </body>
+    // Vue (contient tout ce qui est relatif à l'affichage)
+    window.V = {};
+
+    /**
+     * V.renderNavBar
+     *
+     * Cette fonction est responsable de l'affichage de la barre de navigation (NavBar).
+     * Elle sélectionne l'élément HTML avec l'ID "header" et y insère le contenu
+     * formaté par le composant NavBar.
+     */
+    V.renderNavBar = function (hHome, hLogout, hSelectProfile, profiles) {
+        let header = document.querySelector("#header");
+        // On envoie bien les 4 paramètres à notre formatteur
+        header.innerHTML = NavBar.format(hHome, hLogout, hSelectProfile, profiles);
+    };
+    V.renderMovie = function (data) {
+      let content = document.querySelector("#content");
+      let finalHtml = "";
+      for (let categoryName in data) {
+        let categoryMovie = data[categoryName];
+        finalHtml += MovieCategory.format(categoryName, categoryMovie);
+      }
+      content.innerHTML = finalHtml;
+    };
+    V.renderMovieDetails = function (data) {
+      let content = document.querySelector("#content");
+      content.innerHTML = MovieDetail.format(data);
+    };
+
+    C.start(); // Démarre l'application
+  </script>
+</body>
+
 </html>
 <script type="module"></script>

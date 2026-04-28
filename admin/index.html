@@ -11,11 +11,14 @@
 <body>
   <section id="log"></section>
   <section id="addMenu"></section>
+  <section id="addProfile"></section>
 
   <script type="module">
     import { DataMovie } from './data/dataMovie.js?v=1';
+    import { DataProfile } from './data/dataProfile.js?v=1';
     import { Log } from "./component/Log/script.js";
     import { MovieForm } from "./component/MovieForm/script.js";
+    import { ProfileForm } from "./component/ProfileForm/script.js";
 
     window.C = {};
     C.handlerUpdate = async function () {
@@ -26,13 +29,24 @@
         V.renderLog(res);
       }
 
-    }
+    };
+
+    C.handlerAddProfile = async function() {
+      let formElement = document.querySelector('.addProfile__form');
+      if (formElement.reportValidity()){
+        let formData = new FormData(formElement);
+        let reponse = await DataProfile.add(formData);
+        V.renderLog(reponse);
+        formElement.reset();
+      }
+    };
 
 
     C.start = async function () {
       V.renderLog("Démarrage de l'application");
       let categories = await DataMovie.requestCategories();
       V.renderMovieForm(categories, "C.handlerUpdate()");
+      V.renderProfileForm("C.handlerAddProfile()")
     };
 
     window.V = {};
@@ -44,6 +58,11 @@
     V.renderMovieForm = function (categories, handler) {
       let content = document.querySelector("#addMenu");
       content.innerHTML = MovieForm.format(categories, handler);
+    };
+
+    V.renderProfileForm = function (handler) {
+      let content = document.querySelector("#addProfile");
+      content.innerHTML = ProfileForm.format(handler);
     };
 
     C.start();

@@ -27,15 +27,20 @@ ini_set('display_startup_errors', 1);
 require("model.php");
 
 
-function readMoviesController(){
-    $movies = getAllMovies();
+function readMoviesController() {
+    $age = 0;
+    if (isset($_REQUEST['age'])) {
+        $age = $_REQUEST['age'];
+    }
+    $movies = getAllMovies($age);
+    
     $grp = [];
     foreach($movies as $film){
-      $container = $film -> category_nom;
-      if(!isset($grp[$container])){
-        $groupe[$container] = [];
-      }
-      $grp[$container][] = $film;
+        $container = $film->category_nom;
+        if(!isset($grp[$container])){
+            $grp[$container] = [];
+        }
+        $grp[$container][] = $film;
     }
     return $grp;
 }
@@ -71,6 +76,31 @@ function readMoviesDetailController(){
   $movie = getMovieDetails($id);
   if ($movie != false){
     return $movie;
+  }else{
+    return false;
+  }
+}
+
+function addProfileController(){
+  if (empty($_REQUEST['nom'])){
+    return ["status" => "error", "message" => "Le nom du profil est obligation."];
+  }
+  $nom = $_REQUEST['nom'];
+  $avatar = $_REQUEST['avatar'] ?? "";
+  $age = $_REQUEST['age'];
+  $resultat = addProfile($nom, $avatar, $age);
+
+  if ($resultat !=0) {
+    return "Le profil a été ajouté avec succès.";
+  } else {
+    return false;
+  }
+}
+
+function readProfilesController() {
+  $profiles = getAllProfiles();
+  if ($profiles !== false){
+    return $profiles;
   }else{
     return false;
   }

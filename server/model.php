@@ -26,18 +26,23 @@ define("DBLOGIN", "siron2");
 define("DBPWD", "siron2");
 
 
-function getAllMovies(){
-    // Connexion à la base de données
+
+function getAllMovies($age) {
     $cnx = new PDO("mysql:host=".HOST.";dbname=".DBNAME, DBLOGIN, DBPWD);
-    // Requête SQL pour récupérer le menu avec des paramètres
-    $sql = "SELECT Movie.id, Movie.name, Movie.image, Category.name AS category_nom FROM Movie, Category WHERE Movie.id_category = Category.id";
-    // Prépare la requête SQL
+    
+    $sql = "SELECT Movie.id, Movie.name, Movie.image, Category.name AS category_nom 
+            FROM Movie, Category 
+            WHERE Movie.id_category = Category.id 
+            AND Movie.min_age <= :age";
+            
     $stmt = $cnx->prepare($sql);
-    // Exécute la requête SQL
+    
+    $stmt->bindParam(':age', $age);
+    
     $stmt->execute();
-    // Récupère les résultats de la requête sous forme d'objets
+    
     $res = $stmt->fetchAll(PDO::FETCH_OBJ);
-    return $res; // Retourne les résultats
+    return $res;
 }
 
 function addMovie($name, $year, $length, $description, $director, $id_category, $image, $trailer, $min_age){
@@ -84,5 +89,28 @@ $sql = " SELECT Movie.*, Category.name AS category_name
     $stmt->bindParam(':id', $id);
     $stmt->execute();
     $res = $stmt->fetchAll(PDO::FETCH_OBJ); 
+    return $res;
+}
+
+function addProfile($nom, $avatar, $age) {
+    $cnx = new PDO("mysql:host=".HOST.";dbname=".DBNAME, DBLOGIN, DBPWD);
+    $sql = " INSERT INTO Profile (nom, avatar, 
+    age_restriction)
+             VALUES (:nom, :avatar, :age)";
+    $stmt = $cnx->prepare($sql);
+    $stmt->bindParam(':nom', $nom);
+    $stmt->bindParam(':avatar', $avatar);
+    $stmt->bindParam(':age', $age);
+    $stmt->execute();
+    $res = $stmt->rowCount(); 
+    return $res;
+}
+
+function getAllProfiles(){
+    $cnx = new PDO("mysql:host=".HOST.";dbname=".DBNAME, DBLOGIN, DBPWD);
+    $sql = "SELECT * FROM Profile";
+    $stmt = $cnx->prepare($sql);
+    $stmt->execute();
+    $res = $stmt->fetchAll(PDO::FETCH_OBJ);
     return $res;
 }

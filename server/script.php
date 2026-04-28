@@ -54,6 +54,8 @@ if ( isset($_REQUEST['todo']) ){
   // Récupère la valeur du paramètre 'todo' dans le tableau $_REQUEST
   // $_REQUEST est une superglobale qui contient les paramètres de la requête HTTP.
   $todo = $_REQUEST['todo'];
+  include_once "model.php";
+  include_once "controller.php";
 
   // en fonction de la valeur de 'todo', on appelle la fonction de contrôle appropriée
   // peut s'écrire aussi avec des if/else
@@ -74,6 +76,14 @@ if ( isset($_REQUEST['todo']) ){
 
     case 'readMovieDetail':
       $data = readMoviesDetailController();
+      break;
+
+    case 'addProfile':
+      $data = addProfileController();
+      break;
+
+    case 'readProfiles':
+      $data = readProfilesController(); 
       break;
 
 

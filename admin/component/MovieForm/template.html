@@ -9,13 +9,18 @@
         <input required type="number" name="length" placeholder="Saisir la durée du film">
         <input required type="text" name="description" placeholder="Saisir la description">
 
-            <select name="id_category" class="id-category" id="">
-                {{idList}}
-            </select>
+        <select name="id_category" class="id-category" id="">
+            {{idList}}
+        </select>
 
         <input required type="text" name="image" placeholder="Saisir le nom du fichier de l'affiche du film">
         <input required type="text" name="trailer" placeholder="Saisir l'URL du trailer">
-        <input required type="number" name="min_age" placeholder="Saisir la restriction d'age">
+        <select name="restrictionage" id="">
+            <option value="11">Tout public</option>
+            <option value="12">interdit aux -7 ans</option>
+            <option value="13">interdit aux -12 ans</option>
+            <option value="14">interdit aux -18 ans</option>
+        </select>
         <input onclick="{{handler}}" type="button" value="Update" name="todo">
     </form>
 </div>
