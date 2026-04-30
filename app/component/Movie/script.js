@@ -17,10 +17,11 @@ Movie.format = function (data) {
         let htmlList = "";
         for (let list of data) {
             let li = templateLi;
-            li = li.replaceAll("{{image}}", "../server/images/" +  list.image);
+            li = li.replaceAll("{{image}}", "../server/images/" + list.image);
             li = li.replaceAll("{{title}}", list.name);
             li = li.replaceAll("{{id}}", list.id);
-    
+            li = li.replaceAll("{{handlerAddFavorite}}", "C.handlerAddFavorite(" + list.id + ")");
+
             htmlList += li;
         }
         html = html.replaceAll("{{list}}", htmlList);

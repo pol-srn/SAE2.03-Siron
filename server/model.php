@@ -127,3 +127,21 @@ function getAllProfiles(){
     $res = $stmt->fetchAll(PDO::FETCH_OBJ);
     return $res;
 }
+
+function addFavorite($id_profil, $id_film) {
+    $cnx = new PDO("mysql:host=".HOST.";dbname=".DBNAME, DBLOGIN, DBPWD);
+    $sql = "INSERT INTO favoris (id_profil, id_film) VALUES (:id_profil, :id_film)";
+    $stmt = $cnx->prepare($sql);
+    $stmt->bindParam(':id_profil', $id_profil);
+    $stmt->bindParam(':id_film', $id_film);
+    return $stmt->execute();
+}
+
+function getFavorites($id_profil) {
+    $cnx = new PDO("mysql:host=".HOST.";dbname=".DBNAME, DBLOGIN, DBPWD);
+    $sql = "SELECT Movie.* FROM Movie INNER JOIN favoris fav ON Movie.id = fav.id_film WHERE fav.id_profil = :id_profil";
+    $stmt = $cnx->prepare($sql);
+    $stmt->bindParam(':id_profil', $id_profil);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_OBJ);
+}

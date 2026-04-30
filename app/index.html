@@ -22,10 +22,6 @@
     import { DataProfile } from './data/dataProfile.js';
 
 
-
-    // Controleur
-    // Rappel, écrire window.C plutôt que let C est nécessaire pour tester depuis la console du navigateur
-    // Une fois l'application terminée, on pourrait remettre let C.
     window.C = {};
 
     let activeProfile = null;
@@ -70,39 +66,46 @@
     let profiles = await DataProfile.read();
     let ageDuProfil = profiles.find(profil => profil.id == idProfil).age_restriction;
     let moviesData = await DataMovie.requestMovies(ageDuProfil);
-    V.renderMovie(moviesData);
+    let favoritesData = await DataMovie.readFavorites(activeProfile);
+    V.renderMovie(moviesData, favoritesData); 
 };
 
-    // Vue (contient tout ce qui est relatif à l'affichage)
+    C.handlerAddFavorite = async function (id_film) {
+      if (!activeProfile) {
+        alert("Veuillez d'abord sélectionner un profil pour ajouter des favoris.");
+        return;
+      }
+      let reponse = await DataMovie.addFavorite(activeProfile, id_film);
+      alert(reponse);
+      C.handlerSelectProfile(activeProfile);
+    };
+
+
+
     window.V = {};
 
-    /**
-     * V.renderNavBar
-     *
-     * Cette fonction est responsable de l'affichage de la barre de navigation (NavBar).
-     * Elle sélectionne l'élément HTML avec l'ID "header" et y insère le contenu
-     * formaté par le composant NavBar.
-     */
     V.renderNavBar = function (hHome, hLogout, hSelectProfile, profiles) {
       let header = document.querySelector("#header");
-      // On envoie bien les 4 paramètres à notre formatteur
       header.innerHTML = NavBar.format(hHome, hLogout, hSelectProfile, profiles);
     };
-    V.renderMovie = function (data) {
-      let content = document.querySelector("#content");
-      let finalHtml = "";
-      for (let categoryName in data) {
+    V.renderMovie = function (data, favorites) {
+    let content = document.querySelector("#content");
+    let finalHtml = ""
+    if (favorites && favorites.length > 0) {
+        finalHtml += MovieCategory.format("Ma Liste de Favoris", favorites);
+    }
+    for (let categoryName in data) {
         let categoryMovie = data[categoryName];
         finalHtml += MovieCategory.format(categoryName, categoryMovie);
-      }
-      content.innerHTML = finalHtml;
-    };
+    }
+    content.innerHTML = finalHtml;
+};
     V.renderMovieDetails = function (data) {
       let content = document.querySelector("#content");
       content.innerHTML = MovieDetail.format(data);
     };
 
-    C.start(); // Démarre l'application
+    C.start(); 
   </script>
 </body>
 
