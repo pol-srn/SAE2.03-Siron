@@ -20,6 +20,8 @@
     import { MovieForm } from "./component/MovieForm/script.js";
     import { ProfileForm } from "./component/ProfileForm/script.js";
 
+    let currentProfiles = [];
+
     window.C = {};
     C.handlerUpdate = async function () {
       let form = document.querySelector('.addFilm__form');
@@ -31,23 +33,34 @@
 
     };
 
-    C.handlerAddProfile = async function() {
-      let formElement = document.querySelector('.addProfile__form');
-      if (formElement.reportValidity()){
+    C.handlerSaveProfile = async function () {
+    let formElement = document.querySelector('.addProfile__form');
+    if (formElement.reportValidity()) {
         let formData = new FormData(formElement);
-        let reponse = await DataProfile.add(formData);
+        let reponse = await DataProfile.add(formData); 
         V.renderLog(reponse);
-        formElement.reset();
-      }
-    };
+        C.start(); 
+    }
+};
 
 
     C.start = async function () {
-      V.renderLog("Démarrage de l'application");
-      let categories = await DataMovie.requestCategories();
-      V.renderMovieForm(categories, "C.handlerUpdate()");
-      V.renderProfileForm("C.handlerAddProfile()")
-    };
+    V.renderLog("Démarrage de l'application");
+    let categories = await DataMovie.requestCategories();
+    V.renderMovieForm(categories, "C.handlerUpdate()");
+    let profiles = await DataProfile.read();
+    V.renderProfileForm("C.handlerSaveProfile()", "C.handlerChangeProfile(event)", profiles);
+};
+
+C.handlerChangeProfile = async function (event) {
+    let idChoisi = event.target.value;
+    if (idChoisi == "") {
+        ProfileForm.fill(null); 
+    } else {
+        let profil = await DataProfile.readOne(idChoisi);
+        ProfileForm.fill(profil);
+    }
+};
 
     window.V = {};
 
@@ -60,10 +73,10 @@
       content.innerHTML = MovieForm.format(categories, handler);
     };
 
-    V.renderProfileForm = function (handler) {
-      let content = document.querySelector("#addProfile");
-      content.innerHTML = ProfileForm.format(handler);
-    };
+    V.renderProfileForm = function (handlerSubmit, handlerChange, profiles) {
+    let content = document.querySelector("#addProfile"); 
+    content.innerHTML = ProfileForm.format(handlerSubmit, handlerChange, profiles);
+};
 
     C.start();
   </script>

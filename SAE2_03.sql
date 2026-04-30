@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `SAE2.03`
 --
+CREATE DATABASE IF NOT EXISTS `SAE2.03` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `SAE2.03`;
 
 -- --------------------------------------------------------
 

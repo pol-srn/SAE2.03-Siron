@@ -5,7 +5,7 @@
   <title>SAE2.03 APP</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="./css/base.css" />
+  <link rel="stylesheet" href="./css/base.css" />
 </head>
 
 <body>
@@ -28,7 +28,8 @@
     // Une fois l'application terminée, on pourrait remettre let C.
     window.C = {};
 
-    window.activeProfile = null;
+    let activeProfile = null;
+    let moviesData = null;
 
     C.handlerAbout = function () {
       alert(
@@ -37,47 +38,40 @@
     };
 
     C.start = async function () {
-        let profiles = await DataProfile.read();
-        
-        V.renderNavBar("C.handlerHome()", "C.handlerLogout()", "C.handlerSelectProfile", profiles);
-        
-        let content = document.querySelector("#content");
-        content.innerHTML = "<h2 style='text-align:center; margin-top:50px;'>Veuillez sélectionner un profil pour voir les films.</h2>";
+      let profiles = await DataProfile.read();
+
+      V.renderNavBar("C.handlerHome()", "C.handlerLogout()", "C.handlerSelectProfile", profiles);
+
+      let content = document.querySelector("#content");
+      content.innerHTML = "<h2 style='text-align:center; margin-top:50px;'>Veuillez sélectionner un profil pour voir les films.</h2>";
     };
 
     C.handlerLogout = function () {
-        window.activeProfile = null;
-        C.start();
+      activeProfile = null;
+      C.start();
     };
 
     C.handlerDetail = async function (id_film) {
       let detail = await DataMovie.requestMovieDetails(id_film);
-      console.log("Données reçues du serveur :", detail);
       V.renderMovieDetails(detail);
     }
 
     C.handlerHome = async function () {
-      let moviesData = await DataMovie.requestMovies();
-      V.renderMovie(moviesData);
-    }
+      if (activeProfile) {
+        C.handlerSelectProfile(activeProfile);
+      }
+      else {
+        C.start();
+      }
+    };
 
     C.handlerSelectProfile = async function (idProfil) {
-        if (idProfil == "") {
-            C.start();
-            return;
-        }
-        window.activeProfile = idProfil;
-        let profiles = await DataProfile.read();
-        let ageDuProfil = 0; 
-        for (let i = 0; i < profiles.length; i++) {
-            let profilEnCours = profiles[i];
-            if (profilEnCours.id == idProfil) {
-                ageDuProfil = profilEnCours.age_restriction; 
-            }
-        }
-        let moviesData = await DataMovie.requestMovies(ageDuProfil);   
-        V.renderMovie(moviesData);
-    };
+    activeProfile = idProfil;
+    let profiles = await DataProfile.read();
+    let ageDuProfil = profiles.find(profil => profil.id == idProfil).age_restriction;
+    let moviesData = await DataMovie.requestMovies(ageDuProfil);
+    V.renderMovie(moviesData);
+};
 
     // Vue (contient tout ce qui est relatif à l'affichage)
     window.V = {};
@@ -90,9 +84,9 @@
      * formaté par le composant NavBar.
      */
     V.renderNavBar = function (hHome, hLogout, hSelectProfile, profiles) {
-        let header = document.querySelector("#header");
-        // On envoie bien les 4 paramètres à notre formatteur
-        header.innerHTML = NavBar.format(hHome, hLogout, hSelectProfile, profiles);
+      let header = document.querySelector("#header");
+      // On envoie bien les 4 paramètres à notre formatteur
+      header.innerHTML = NavBar.format(hHome, hLogout, hSelectProfile, profiles);
     };
     V.renderMovie = function (data) {
       let content = document.querySelector("#content");

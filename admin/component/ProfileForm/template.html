@@ -1,6 +1,12 @@
 <section class="addProfile">
     <p class="addProfile__title">Ajouter un profil utilisateur</p>
     <form class="addProfile__form">
+
+        <select name="id" onchange="{{handlerChange}}">
+            <option value=""> Créer un nouveau profil </option>
+            {{idList}}
+        </select>
+
         <input required type="text" name="nom" placeholder="Nom du Profil">
         <input type="text" name="avatar" placeholder="Nom de l'avatar (ex: Patricia.png) - Facultatif">
         <select name="age">

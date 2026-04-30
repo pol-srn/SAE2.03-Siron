@@ -3,17 +3,18 @@ let HOST_URL = "https://mmi.unilim.fr/~siron2/SAE2.03-Siron";//"http://mmi.unili
 
 let DataMovie = {};
 
-DataMovie.requestMovies = async function () {
-    let answer = await fetch(URL + "/server/script.php?todo=readmovies");
-    let data = await answer.json();
-    return data;
-};
 
 DataMovie.requestMovies = async function (age) {
 if (age == undefined) {
         age = 0;
     }
 let answer = await fetch(HOST_URL + "/server/script.php?todo=readmovies&age=" + age);    
+    let data = await answer.json();
+    return data;
+};
+
+DataMovie.requestMovieDetails = async function (id_film) {
+    let answer = await fetch(HOST_URL + "/server/script.php?todo=readMovieDetail&id=" + id_film);
     let data = await answer.json();
     return data;
 };
