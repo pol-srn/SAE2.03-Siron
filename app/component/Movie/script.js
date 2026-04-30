@@ -20,8 +20,13 @@ Movie.format = function (data) {
             li = li.replaceAll("{{image}}", "../server/images/" + list.image);
             li = li.replaceAll("{{title}}", list.name);
             li = li.replaceAll("{{id}}", list.id);
-            li = li.replaceAll("{{handlerAddFavorite}}", "C.handlerAddFavorite(" + list.id + ")");
-
+            if (list.isFav) {
+                li = li.replaceAll("{{btnAction}}", "C.handlerRemoveFavorite(" + list.id + ")");
+                li = li.replaceAll("{{activeClass}}", "is-fav");
+            } else {
+                li = li.replaceAll("{{btnAction}}", "C.handlerAddFavorite(" + list.id + ")");
+                li = li.replaceAll("{{activeClass}}", "");
+            }
             htmlList += li;
         }
         html = html.replaceAll("{{list}}", htmlList);

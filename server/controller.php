@@ -115,3 +115,10 @@ function readFavoritesController() {
     $id_profil = $_REQUEST['id_profil'];
     return getFavorites($id_profil);
 }
+
+function removeFavoriteController() {
+    $id_profil = $_REQUEST['id_profil'];
+    $id_film = $_REQUEST['id_film'];
+    removeFavorite($id_profil, $id_film);
+    return "Le film a été retiré de vos favoris.";
+}
