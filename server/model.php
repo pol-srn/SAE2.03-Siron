@@ -21,9 +21,9 @@ ini_set('display_startup_errors', 1);
  * DBPWD : Mot de passe pour se connecter à la base de données.
  */
 define("HOST", "localhost");
-define("DBNAME", "siron2");
-define("DBLOGIN", "siron2");
-define("DBPWD", "siron2");
+define("DBNAME", "SAE2.03");
+define("DBLOGIN", "usersae203");
+define("DBPWD", "Wnxbcv266400!");
 
 
 
@@ -154,3 +154,94 @@ function removeFavorite($id_profil, $id_film) {
     $stmt->bindParam(':id_film', $id_film);
     return $stmt->execute();
 }
+
+function getFeaturedMovies() {
+    $cnx = new PDO("mysql:host=".HOST.";dbname=".DBNAME, DBLOGIN, DBPWD);
+    $sql = "SELECT id, name, image, description FROM Movie WHERE mis_en_avant = 1";
+    $stmt = $cnx->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_OBJ);
+}
+
+
+
+function getTotalProfiles() {
+    $cnx = new PDO("mysql:host=".HOST.";dbname=".DBNAME, DBLOGIN, DBPWD);
+    $sql = "SELECT COUNT(*) as total FROM Profile";
+    $stmt = $cnx->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+    foreach($result as $row) { return $row->total; }
+}
+
+function getTotalMovies() {
+    $cnx = new PDO("mysql:host=".HOST.";dbname=".DBNAME, DBLOGIN, DBPWD);
+    $sql = "SELECT COUNT(*) as total FROM Movie";
+    $stmt = $cnx->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+    foreach($result as $row) { return $row->total; }
+}
+
+function getAverageFavorites() {
+    $cnx = new PDO("mysql:host=".HOST.";dbname=".DBNAME, DBLOGIN, DBPWD);
+    $sql = "SELECT ROUND(COUNT(id_film) / COUNT(DISTINCT id_profil), 1) as moyenne FROM favoris";
+    $stmt = $cnx->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+    foreach($result as $row) { return $row->moyenne ? $row->moyenne : 0; }
+    return 0;
+}
+
+function getTopMovie() {
+    $cnx = new PDO("mysql:host=".HOST.";dbname=".DBNAME, DBLOGIN, DBPWD);
+    $sql = "SELECT Movie.name, COUNT(fav.id_film) as total_fav 
+            FROM Movie 
+            INNER JOIN favoris fav ON Movie.id = fav.id_film 
+            GROUP BY Movie.id 
+            ORDER BY total_fav DESC LIMIT 1";
+    $stmt = $cnx->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+    foreach($result as $row) { return $row->name; }
+    return "Aucun";
+}
+
+function getTopCategory() {
+    $cnx = new PDO("mysql:host=".HOST.";dbname=".DBNAME, DBLOGIN, DBPWD);
+    $sql = "SELECT Category.name as category_name, COUNT(fav.id_film) as total_fav 
+            FROM Movie 
+            INNER JOIN favoris fav ON Movie.id = fav.id_film 
+            INNER JOIN Category ON Movie.id_category = Category.id
+            GROUP BY Category.id 
+            ORDER BY total_fav DESC LIMIT 1";
+    $stmt = $cnx->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+    foreach($result as $row) { return $row->category_name; }
+    return "Aucune";
+}
+
+function getStatistics() {
+    $stats = new stdClass();
+    $stats->total_profiles = getTotalProfiles();
+    $stats->total_movies = getTotalMovies();
+    $stats->moyenne_favoris = getAverageFavorites();
+    $stats->top_movie = getTopMovie();
+    $stats->top_category = getTopCategory();
+    return $stats;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+?>

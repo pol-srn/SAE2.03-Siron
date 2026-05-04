@@ -20,6 +20,8 @@
     import { MovieDetail } from "./component/MovieDetail/script.js";
     import { MovieCategory } from "./component/MovieCategory/script.js";
     import { DataProfile } from './data/dataProfile.js';
+    import { Featured } from "./component/Featured/script.js";
+    import { Statistic } from "./component/Statistic/script.js";
 
 
     window.C = {};
@@ -36,8 +38,7 @@
     C.start = async function () {
       let profiles = await DataProfile.read();
 
-      V.renderNavBar("C.handlerHome()", "C.handlerLogout()", "C.handlerSelectProfile", profiles);
-
+      V.renderNavBar("C.handlerHome()", "C.handlerSelectProfile", "C.handlerStatistics()", "C.handlerLogout()", profiles);
       let content = document.querySelector("#content");
       content.innerHTML = "<h2 style='text-align:center; margin-top:50px;'>Veuillez sélectionner un profil pour voir les films.</h2>";
     };
@@ -72,8 +73,9 @@
       }
       let moviesData = await DataMovie.requestMovies(ageDuProfil);
       let favoritesData = await DataMovie.readFavorites(activeProfile);
+      let featuredData = await DataMovie.readFeaturedMovies();
       DataMovie.applyFavoriteTags(moviesData, favoritesData);
-      V.renderMovie(moviesData, favoritesData);
+      V.renderMovie(moviesData, favoritesData, featuredData);
     };
 
     C.handlerAddFavorite = async function (id_film) {
@@ -94,31 +96,57 @@
     };
 
 
+    C.handlerStatistics = async function () {
+      let statsData = await DataMovie.readStatistics();
+      V.renderStatistics(statsData);
+    };
+
+    C.handlerStatistics = async function () {
+      let statsData = await DataMovie.readStatistics();
+      V.renderStatistics(statsData);
+    };
+
+
     window.V = {};
 
-    V.renderNavBar = function (hHome, hLogout, hSelectProfile, profiles) {
+
+
+    V.renderNavBar = function (hHome, hSelectProfile, hStats, hLogout, profiles) {
       let header = document.querySelector("#header");
-      header.innerHTML = NavBar.format(hHome, hLogout, hSelectProfile, profiles);
+      header.innerHTML = NavBar.format(hHome, hSelectProfile, hStats, hLogout, profiles);
     };
-    V.renderMovie = function (data, favorites) {
+
+    V.formatFavorites = function (favorites) {
+      if (favorites.length > 0) {
+        return MovieCategory.format("Ma Liste de Favoris", favorites);
+      }
+      return "<h2 style='margin-left:20px;'>Ma Liste de Favoris</h2><p style='text-align:center; margin-bottom: 20px;'>Votre liste de favoris est vide.</p>";
+    };
+
+    V.renderMovie = function (data, favorites, featuredData) {
       let content = document.querySelector("#content");
-      let finalHtml = ""
+      let html = "";
+
+      if (featuredData) {
+        html += Featured.format(featuredData);
+      }
       if (favorites) {
-        if (favorites.length > 0) {
-          finalHtml += MovieCategory.format("Ma Liste de Favoris", favorites);
-        } else {
-          finalHtml += "<h2>Ma Liste de Favoris</h2><p style='text-align:center; margin-bottom: 20px;'>Votre liste de favoris est vide.</p>";
-        }
+        html += V.formatFavorites(favorites);
       }
       for (let categoryName in data) {
-        let categoryMovie = data[categoryName];
-        finalHtml += MovieCategory.format(categoryName, categoryMovie);
+        html += MovieCategory.format(categoryName, data[categoryName]);
       }
-      content.innerHTML = finalHtml;
+      content.innerHTML = html;
     };
+
     V.renderMovieDetails = function (data) {
       let content = document.querySelector("#content");
       content.innerHTML = MovieDetail.format(data);
+    };
+
+    V.renderStatistics = function (statsData) {
+      let content = document.querySelector("#content");
+      content.innerHTML = Statistic.format(statsData);
     };
 
     C.start(); 

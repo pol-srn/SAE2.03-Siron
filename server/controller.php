@@ -122,3 +122,12 @@ function removeFavoriteController() {
     removeFavorite($id_profil, $id_film);
     return "Le film a été retiré de vos favoris.";
 }
+
+function getFeaturedMoviesController() {
+    return getFeaturedMovies();
+}
+
+
+function getStatisticsController() {
+    return getStatistics(); 
+}

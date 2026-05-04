@@ -50,4 +50,15 @@ DataMovie.applyFavoriteTags = function (moviesData, favoritesData) {
     }
 };
 
+DataMovie.readFeaturedMovies = async function () {
+    let answer = await fetch(HOST_URL + "/server/script.php?todo=readFeaturedMovies");
+    return await answer.json();
+};
+
+DataMovie.readStatistics = async function () {
+    let answer = await fetch(HOST_URL + "/server/script.php?todo=readStatistics");
+    let data = await answer.json();
+    return data;
+};
+
 export { DataMovie };
