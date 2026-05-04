@@ -68,29 +68,11 @@
       for (let profil of profiles) {
         if (profil.id == idProfil) {
           ageDuProfil = profil.age_restriction;
-          break;
         }
       }
       let moviesData = await DataMovie.requestMovies(ageDuProfil);
       let favoritesData = await DataMovie.readFavorites(activeProfile);
-      if (favoritesData) {
-        for (let fav of favoritesData) {
-          fav.isFav = true;
-        }
-      }
-      if (moviesData && favoritesData) {
-        for (let categoryName in moviesData) {
-          for (let movie of moviesData[categoryName]) {
-            movie.isFav = false;
-            for (let fav of favoritesData) {
-              if (fav.id == movie.id) {
-                movie.isFav = true; 
-                break;
-              }
-            }
-          }
-        }
-      }
+      DataMovie.applyFavoriteTags(moviesData, favoritesData);
       V.renderMovie(moviesData, favoritesData);
     };
 

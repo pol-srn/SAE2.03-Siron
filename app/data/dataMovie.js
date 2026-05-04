@@ -1,13 +1,12 @@
-// URL où se trouve le répertoire "server" sur mmi.unilim.fr
-let HOST_URL = "..";//"http://mmi.unilim.fr/~????"; // CHANGE THIS TO 
+let HOST_URL = "..";
 
 let DataMovie = {};
 
 DataMovie.requestMovies = async function (age) {
-if (age == undefined) {
+    if (age == undefined) {
         age = 0;
     }
-let answer = await fetch(HOST_URL + "/server/script.php?todo=readmovies&age=" + age);    
+    let answer = await fetch(HOST_URL + "/server/script.php?todo=readmovies&age=" + age);
     let data = await answer.json();
     return data;
 };
@@ -32,7 +31,23 @@ DataMovie.readFavorites = async function (id_profil) {
 
 DataMovie.removeFavorite = async function (id_profil, id_film) {
     let answer = await fetch(HOST_URL + "/server/script.php?todo=removeFavorite&id_profil=" + id_profil + "&id_film=" + id_film);
-    return await answer.json(); 
+    return await answer.json();
+};
+
+DataMovie.applyFavoriteTags = function (moviesData, favoritesData) {
+    for (let fav of favoritesData) {
+        fav.isFav = true;
+    }
+    for (let categoryName in moviesData) {
+        for (let movie of moviesData[categoryName]) {
+            movie.isFav = false;
+            for (let fav of favoritesData) {
+                if (fav.id == movie.id) {
+                    movie.isFav = true;
+                }
+            }
+        }
+    }
 };
 
 export { DataMovie };
