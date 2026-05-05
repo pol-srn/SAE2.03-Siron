@@ -131,3 +131,20 @@ function getFeaturedMoviesController() {
 function getStatisticsController() {
     return getStatistics(); 
 }
+
+function searchMoviesController() {
+    $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : "";
+    $age = isset($_GET['age']) ? $_GET['age'] : 0;
+    return searchMovies($keyword, $age);
+}
+
+function updateFeaturedMovieController() {
+    $id_film = isset($_REQUEST['id_film']) ? $_REQUEST['id_film'] : 0;
+    $status = isset($_REQUEST['status']) ? $_REQUEST['status'] : 0;
+    $ok = updateFeaturedMovie($id_film, $status);
+    if ($ok) {
+        return "Le statut du film a bien été mis à jour.";
+    } else {
+        return "Erreur lors de la mise à jour du statut.";
+    }
+}

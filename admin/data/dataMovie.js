@@ -28,4 +28,16 @@ DataMovie.requestMovieDetails = async function (id_film) {
     return data;
 };
 
+DataMovie.searchMoviesAdmin = async function (keyword) {
+    let answer = await fetch(HOST_URL + "/server/script.php?todo=searchMovies&keyword=" + keyword + "&age=99");
+    let data = await answer.json();
+    return data;
+};
+
+DataMovie.updateFeatured = async function (id_film, status) {
+    let answer = await fetch(HOST_URL + "/server/script.php?todo=updateFeatured&id_film=" + id_film + "&status=" + status);
+    let data = await answer.json();
+    return data;
+};
+
 export {DataMovie};

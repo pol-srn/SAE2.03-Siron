@@ -12,6 +12,7 @@
   <section id="log"></section>
   <section id="addMenu"></section>
   <section id="addProfile"></section>
+  <section id="featuredManager"></section>
 
   <script type="module">
     import { DataMovie } from './data/dataMovie.js?v=1';
@@ -19,6 +20,7 @@
     import { Log } from "./component/Log/script.js";
     import { MovieForm } from "./component/MovieForm/script.js";
     import { ProfileForm } from "./component/ProfileForm/script.js";
+    import { FeaturedList } from "./component/FeaturedList/script.js";
 
     let currentProfiles = [];
 
@@ -34,33 +36,51 @@
     };
 
     C.handlerSaveProfile = async function () {
-    let formElement = document.querySelector('.addProfile__form');
-    if (formElement.reportValidity()) {
+      let formElement = document.querySelector('.addProfile__form');
+      if (formElement.reportValidity()) {
         let formData = new FormData(formElement);
-        let reponse = await DataProfile.add(formData); 
+        let reponse = await DataProfile.add(formData);
         V.renderLog(reponse);
-        C.start(); 
-    }
-};
+        C.start();
+      }
+    };
 
 
     C.start = async function () {
-    V.renderLog("Démarrage de l'application");
-    let categories = await DataMovie.requestCategories();
-    V.renderMovieForm(categories, "C.handlerUpdate()");
-    let profiles = await DataProfile.read();
-    V.renderProfileForm("C.handlerSaveProfile()", "C.handlerChangeProfile(event)", profiles);
-};
+      V.renderLog("Démarrage de l'application");
+      let categories = await DataMovie.requestCategories();
+      V.renderMovieForm(categories, "C.handlerUpdate()");
+      let profiles = await DataProfile.read();
+      V.renderProfileForm("C.handlerSaveProfile()", "C.handlerChangeProfile(event)", profiles);
+      V.renderFeaturedManager();
+    };
 
-C.handlerChangeProfile = async function (event) {
-    let idChoisi = event.target.value;
-    if (idChoisi == "") {
-        ProfileForm.fill(null); 
-    } else {
+    C.handlerChangeProfile = async function (event) {
+      let idChoisi = event.target.value;
+      if (idChoisi == "") {
+        ProfileForm.fill(null);
+      } else {
         let profil = await DataProfile.readOne(idChoisi);
         ProfileForm.fill(profil);
-    }
-};
+      }
+    };
+
+    C.handlerSearchFeatured = async function (keyword) {
+      let itemsContainer = document.querySelector("#featuredListItems");
+      if (keyword.trim() === "") {
+        itemsContainer.innerHTML = "";
+        return;
+      }
+      let searchResults = await DataMovie.searchMoviesAdmin(keyword);
+      itemsContainer.innerHTML = FeaturedList.formatItems(searchResults);
+    };
+
+    C.handlerUpdateFeatured = async function (id_film, newStatus) {
+      let message = await DataMovie.updateFeatured(id_film, newStatus);
+      V.renderLog(message);
+      let currentKeyword = document.querySelector("#featuredSearchInput").value;
+      C.handlerSearchFeatured(currentKeyword);
+    };
 
     window.V = {};
 
@@ -74,9 +94,14 @@ C.handlerChangeProfile = async function (event) {
     };
 
     V.renderProfileForm = function (handlerSubmit, handlerChange, profiles) {
-    let content = document.querySelector("#addProfile"); 
-    content.innerHTML = ProfileForm.format(handlerSubmit, handlerChange, profiles);
-};
+      let content = document.querySelector("#addProfile");
+      content.innerHTML = ProfileForm.format(handlerSubmit, handlerChange, profiles);
+    };
+
+    V.renderFeaturedManager = function () {
+      let container = document.querySelector("#featuredManager");
+      container.innerHTML = FeaturedList.formatContainer("C.handlerSearchFeatured(this.value)");
+    };
 
     C.start();
   </script>

@@ -21,9 +21,9 @@ ini_set('display_startup_errors', 1);
  * DBPWD : Mot de passe pour se connecter à la base de données.
  */
 define("HOST", "localhost");
-define("DBNAME", "SAE2.03");
-define("DBLOGIN", "usersae203");
-define("DBPWD", "Wnxbcv266400!");
+define("DBNAME", "siron2");
+define("DBLOGIN", "siron2");
+define("DBPWD", "siron2");
 
 
 
@@ -164,7 +164,6 @@ function getFeaturedMovies() {
 }
 
 
-
 function getTotalProfiles() {
     $cnx = new PDO("mysql:host=".HOST.";dbname=".DBNAME, DBLOGIN, DBPWD);
     $sql = "SELECT COUNT(*) as total FROM Profile";
@@ -233,9 +232,28 @@ function getStatistics() {
 }
 
 
+function searchMovies($keyword, $age) {
+    $cnx = new PDO("mysql:host=".HOST.";dbname=".DBNAME, DBLOGIN, DBPWD);
+    $sql = "SELECT Movie.*, Category.name AS category_nom 
+            FROM Movie 
+            INNER JOIN Category ON Movie.id_category = Category.id 
+            WHERE LOWER(Movie.name) LIKE LOWER(:keyword) AND Movie.min_age <= :age";
+    $stmt = $cnx->prepare($sql);
+    $searchString = "%" . $keyword . "%";
+    $stmt->bindValue(':keyword', $searchString, PDO::PARAM_STR); 
+    $stmt->bindValue(':age', (int)$age, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_OBJ);
+}
 
-
-
+function updateFeaturedMovie($id_film, $status) {
+    $cnx = new PDO("mysql:host=".HOST.";dbname=".DBNAME, DBLOGIN, DBPWD);
+    $sql = "UPDATE Movie SET mis_en_avant = :status WHERE id = :id_film";
+    $stmt = $cnx->prepare($sql);
+    $stmt->bindValue(':status', (int)$status, PDO::PARAM_INT);
+    $stmt->bindValue(':id_film', (int)$id_film, PDO::PARAM_INT);
+    return $stmt->execute();
+}
 
 
 

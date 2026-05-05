@@ -38,7 +38,7 @@
     C.start = async function () {
       let profiles = await DataProfile.read();
 
-      V.renderNavBar("C.handlerHome()", "C.handlerSelectProfile", "C.handlerStatistics()", "C.handlerLogout()", profiles);
+      V.renderNavBar("C.handlerHome()", "C.handlerSelectProfile", "C.handlerStatistics()", "C.handlerLogout()", "C.handlerSearch(this.value)", profiles);
       let content = document.querySelector("#content");
       content.innerHTML = "<h2 style='text-align:center; margin-top:50px;'>Veuillez sélectionner un profil pour voir les films.</h2>";
     };
@@ -101,9 +101,25 @@
       V.renderStatistics(statsData);
     };
 
-    C.handlerStatistics = async function () {
-      let statsData = await DataMovie.readStatistics();
-      V.renderStatistics(statsData);
+
+    C.handlerSearch = async function (keyword) {
+      if (keyword.trim() === "") {
+        if (activeProfile) {
+          C.handlerSelectProfile(activeProfile);
+        } else {
+          C.start();
+        }
+        return;
+      }
+      let ageLimite = 0;
+      let profiles = await DataProfile.read();
+      for (let profil of profiles) {
+        if (profil.id == activeProfile) {
+          ageLimite = profil.age_restriction;
+        }
+      }
+      let searchResults = await DataMovie.searchMovies(keyword, ageLimite);
+      V.renderSearchResults(searchResults);
     };
 
 
@@ -111,9 +127,9 @@
 
 
 
-    V.renderNavBar = function (hHome, hSelectProfile, hStats, hLogout, profiles) {
+    V.renderNavBar = function (hHome, hSelectProfile, hStats, hLogout, hSearch, profiles) {
       let header = document.querySelector("#header");
-      header.innerHTML = NavBar.format(hHome, hSelectProfile, hStats, hLogout, profiles);
+      header.innerHTML = NavBar.format(hHome, hSelectProfile, hStats, hLogout, hSearch, profiles);
     };
 
     V.formatFavorites = function (favorites) {
@@ -147,6 +163,16 @@
     V.renderStatistics = function (statsData) {
       let content = document.querySelector("#content");
       content.innerHTML = Statistic.format(statsData);
+    };
+
+    V.renderSearchResults = function (movies) {
+      let content = document.querySelector("#content");
+
+      if (movies.length > 0) {
+        content.innerHTML = MovieCategory.format("Résultats de la recherche", movies);
+      } else {
+        content.innerHTML = "<h2 style='text-align:center; margin-top:50px;'>Aucun film ne correspond à votre recherche.</h2>";
+      }
     };
 
     C.start(); 

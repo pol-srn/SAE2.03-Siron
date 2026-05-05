@@ -61,4 +61,10 @@ DataMovie.readStatistics = async function () {
     return data;
 };
 
+DataMovie.searchMovies = async function (keyword, age) {
+    let answer = await fetch(HOST_URL + "/server/script.php?todo=searchMovies&keyword=" + keyword + "&age=" + age);
+    let data = await answer.json();
+    return data;
+};
+
 export { DataMovie };
