@@ -1,21 +1,23 @@
-<section class="addProfile">
-    <p class="addProfile__title">Ajouter un profil utilisateur</p>
-    <form class="addProfile__form">
+<section class="profileForm">
+    <p class="profileForm__title">Ajouter un profil utilisateur</p>
+    <form class="profileForm__form">
 
-        <select name="id" onchange="{{handlerChange}}">
-            <option value=""> Créer un nouveau profil </option>
+        <select class="profileForm__select" name="id" onchange="{{handleChange}}">
+            <option class="profileForm__option" value=""> Créer un nouveau profil </option>
             {{idList}}
         </select>
 
-        <input required type="text" name="nom" placeholder="Nom du Profil">
-        <input type="text" name="avatar" placeholder="Nom de l'avatar (ex: Patricia.png) - Facultatif">
-        <select name="age">
-            <option value="0">Tous publics</option>
-            <option value="10">Déconseillé aux -10 ans</option>
-            <option value="12">Interdit aux -12ans</option>
-            <option value="16">Interdit aux -16ans</option>
-            <option value="18">Interdit aux -18ans</option>
+        <input class="profileForm__input" required type="text" name="nom" placeholder="Nom du Profil">
+        <input class="profileForm__input" type="text" name="avatar" placeholder="Nom de l'avatar (ex: Patricia.png) - Facultatif">
+
+        <select class="profileForm__select" name="age">
+            <option class="profileForm__option" value="0">Tous publics</option>
+            <option class="profileForm__option" value="10">Déconseillé aux -10 ans</option>
+            <option class="profileForm__option" value="12">Interdit aux -12ans</option>
+            <option class="profileForm__option" value="16">Interdit aux -16ans</option>
+            <option class="profileForm__option" value="18">Interdit aux -18ans</option>
         </select>
-        <button type="button" onclick="{{handler}}">Ajouter le profil</button>
+
+        <button class="profileForm__btn" type="button" onclick="{{handler}}">Ajouter le profil</button>
     </form>
 </section>

@@ -2,8 +2,8 @@
     .featured-wrapper {
         position: relative;
         width: 100%;
-        height: 73vh; /* On agrandit un peu le hero pour laisser la magie opérer */
-        margin-bottom: -12rem; /* On tire violemment le carrousel de films vers le haut */
+        height: 73vh; 
+        margin-bottom: -8rem; 
     }
     .featured {
         display: flex;
