@@ -1,0 +1,66 @@
+@layer components {
+    .movie {
+        display: block;
+        width: 100%;
+        padding: 1rem 0;
+    }
+
+    .movie__list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 1rem;
+        padding: 1rem 2rem;
+        scrollbar-width: none;
+    }
+
+    .movie__list::-webkit-scrollbar {
+        display: none;
+    }
+
+    .movie__item {
+        flex: 0 0 auto;
+        width: 20.7rem;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .movie__img {
+        width: 21rem;
+        height: 12rem;
+        border-radius: 0.2rem;
+        object-fit: cover;
+    }
+
+    .movie__grp {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    .movie__title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--color-hover);
+        margin: 0;
+    }
+
+    .btn-fav {
+        background: transparent;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+
+    .btn-fav svg path {
+        fill: transparent;
+    }
+
+    .btn-fav.is-fav svg path {
+        fill: var(--color-text-main);
+    }
+}

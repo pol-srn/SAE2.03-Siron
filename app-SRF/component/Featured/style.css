@@ -1,0 +1,109 @@
+@layer components {
+    .featured-wrapper {
+        position: relative;
+        width: 100%;
+        height: 73vh; /* On agrandit un peu le hero pour laisser la magie opérer */
+        margin-bottom: -12rem; /* On tire violemment le carrousel de films vers le haut */
+    }
+    .featured {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .featured::-webkit-scrollbar {
+        display: none;
+    }
+
+    .featured__card {
+        flex: 0 0 100%;
+        height: 100%;
+        scroll-snap-align: start;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .featured__image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center top;
+        z-index: 0;
+    }
+
+    .featured__card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, var(--color-bg-main) 0%, transparent 20%),
+                    linear-gradient(to right, rgba(0, 0, 0, 0.8) 0%, transparent 60%);
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .featured__content {
+        position: absolute;
+        bottom: 14rem; 
+        left: 4rem;
+        padding-inline-start: 4rem;
+        z-index: 2;
+        color: var(--color-text-main);
+        max-width: 45%;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .featured__title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        line-height: 1.1;
+        margin: 0;
+    }
+
+    .featured__description {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        color: var(--color-text-main);
+    }
+
+    .featured__btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(33, 33, 33, 0.6);
+        color: var(--color-text-main);
+        border: none;
+        width: 3.5rem;
+        height: 3.5rem;
+        border-radius: 50%;
+        font-size: 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        z-index: 10;
+    }
+
+    .featured__btn--prev {
+        left: 2rem;
+    }
+
+    .featured__btn--next {
+        right: 2rem;
+    }
+}
