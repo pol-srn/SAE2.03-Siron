@@ -21,9 +21,9 @@ ini_set('display_startup_errors', 1);
  * DBPWD : Mot de passe pour se connecter à la base de données.
  */
 define("HOST", "localhost");
-define("DBNAME", "siron2");
-define("DBLOGIN", "siron2");
-define("DBPWD", "siron2");
+define("DBNAME", "SAE2.03");
+define("DBLOGIN", "usersae203");
+define("DBPWD", "Wnxbcv266400!");
 
 
 
