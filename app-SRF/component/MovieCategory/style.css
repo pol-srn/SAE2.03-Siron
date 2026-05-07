@@ -1,17 +1,13 @@
-@layer components {
-    .movie-category {
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        z-index: 10;
-    }
+.movie-category {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 10;
 
     .movie-category__title {
         font-size: 2rem;
         font-weight: 700;
-        color: var(--color-text-main);
         padding: 0 2rem;
-        margin: 0;
     }
 
     .movie-category__list {
@@ -27,7 +23,7 @@
         display: none;
     }
 
-    .movie-category__list > * {
+    .movie-category__list>* {
         flex-shrink: 0;
         scroll-snap-align: start;
     }

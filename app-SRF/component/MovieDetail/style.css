@@ -1,16 +1,13 @@
-@layer components {
-    .movieDetail__item {
-        background: linear-gradient(to bottom, #212b30, #101214);
-        padding: 2.5rem 3rem;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        gap: 5rem;
-    }
+.movieDetail__item {
+    background: linear-gradient(to bottom, #212b30, #101214);
+    padding: 2.5rem 3rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
 
     .movieDetail__container {
         display: flex;
-        flex-direction: row;
         justify-content: space-between;
         align-items: flex-start;
         gap: 4rem;
@@ -70,7 +67,6 @@
 
     .movieDetail__img {
         flex: 0 0 35%;
-        width: 35%;
         max-width: 35%;
         aspect-ratio: 16 / 9;
         object-fit: cover;

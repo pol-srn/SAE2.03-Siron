@@ -1,11 +1,10 @@
-@layer components {
-    .navbar {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: var(--color-text-main);
-        background-color: var(--color-bg-surface);
-    }
+.navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 5rem;
+    color: var(--color-text-main);
+    background-color: var(--color-bg-surface);
 
     .navbar__list {
         display: flex;
@@ -25,16 +24,32 @@
     .navbar__item {
         display: flex;
         align-items: center;
-        height: 5rem;
-        width: auto;
+        padding: 0.6rem 1.2rem;
+        border-radius: 0.2rem;
         cursor: pointer;
         font-size: 1.2rem;
         font-weight: 700;
     }
 
+    .navbar__item--logo {
+        padding: 0;
+    }
+
+    .navbar__item:hover {
+        background-color: var(--color-hover);
+
+        select,
+        input {
+            background-color: var(--color-hover);
+        }
+    }
+
+    .navbar__item--logo:hover {
+        background-color: transparent;
+    }
+
     .navbar__item--img {
         height: 2.5rem;
-        width: auto;
     }
 
     .navbar__item--profile {
@@ -54,7 +69,6 @@
     }
 
     .navbar__item--grp {
-        display: flex;
         gap: 1rem;
     }
 

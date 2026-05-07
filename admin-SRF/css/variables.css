@@ -27,6 +27,7 @@
   --color-red: hsl(0, 100%, 42%);
   --color-white: hsl(0, 0%, 100%);
   --color-light-grey: hsl(0, 0%, 60%);
+  --color-green: hsl(142, 69%, 58%);
 
   /*Sementic Tokens*/
   
@@ -35,6 +36,7 @@
   --color-accent : var(--color-red);
   --color-text-main : var(--color-white);
   --color-hover : var(--color-light-grey);
+  --color-success : var(--color-green);
   
   /*Police d'écriture*/
 

@@ -1,5 +1,8 @@
 <li onclick="C.handlerDetail('{{id}}')" class="movie__item">
     <img class="movie__img" src="{{image}}" alt="image">
+    <svg class="movie__play" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#ffffff" d="M8 5v14l11-7z" />
+    </svg>
     <div class="movie__grp">
         <p class="movie__title">{{title}}</p>
         <button class="btn-fav {{activeClass}}" onclick="{{btnAction}}">

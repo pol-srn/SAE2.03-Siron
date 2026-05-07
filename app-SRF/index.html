@@ -53,16 +53,10 @@
     C.handlerDetail = async function (id_film) {
       let detail = await DataMovie.requestMovieDetails(id_film);
       let favoritesData = await DataMovie.readFavorites(activeProfile);
-
-      // Le PHP envoie un tableau, donc on extrait le film de la case
       let movie = detail;
-
       if (movie) {
-        // On vérifie le favori sur le film lui-même
         movie.isFav = favoritesData.some(fav => fav.id == movie.id);
       }
-
-      // On envoie uniquement l'objet du film à la vue
       V.renderMovieDetails(movie);
     };
 
